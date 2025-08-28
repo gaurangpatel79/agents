@@ -21,6 +21,6 @@ ALPHA_VANTAGE_API_KEY=your-alpha-vantage-api-key-here
 # MONTE_CARLO_SIMULATIONS=10000
 # FORECAST_YEARS=5
 
-
-
-
+# App Authentication (Optional - if not set, authentication will be disabled)
+FINANCE_COPILOT_USERNAME=admin
+FINANCE_COPILOT_PASSWORD=finance123

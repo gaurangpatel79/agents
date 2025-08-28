@@ -1507,9 +1507,19 @@ No recent news articles were found for this company.
     
     def launch(self, **kwargs):
         """Launch the Gradio app with authentication"""
+        # Get credentials from environment variables
+        username = os.getenv("FINANCE_COPILOT_USERNAME")
+        password = os.getenv("FINANCE_COPILOT_PASSWORD")
+
+        auth_creds = []
+        if username and password:
+            auth_creds = [(username, password)]
+        else:
+            print("⚠️ Warning: FINANCE_COPILOT_USERNAME and FINANCE_COPILOT_PASSWORD are not set. Authentication will be disabled.")
+
         # Add authentication parameters
         auth_kwargs = {
-            "auth": [("admin", "finance123")],  # Default credentials
+            "auth": auth_creds if auth_creds else None,
             "auth_message": "🔐 Welcome to Finance Copilot! Please login to access the application.",
             "show_error": True,
             "server_name": "0.0.0.0",
@@ -1518,9 +1528,9 @@ No recent news articles were found for this company.
             **kwargs
         }
         
-        print("🔐 Launching Finance Copilot with authentication...")
-        print("👤 Default credentials: admin / finance123")
-        print("💡 You can modify credentials in the code")
+        print("🔐 Launching Finance Copilot...")
+        if auth_creds:
+            print("🔐 Authentication enabled.")
         
         return self.app.launch(**auth_kwargs)
     
@@ -1553,22 +1563,20 @@ def main():
         if hf_space_id:
             # Hugging Face Spaces deployment
             print(f"🌐 Deploying to Hugging Face Spaces: {hf_space_id}")
-            app.app.launch(
+            app.launch(
                 server_name="0.0.0.0",
                 server_port=7860,
                 share=False,  # Don't create public link on HF
-                auth=("admin", "finance123"),
                 show_error=True,
                 quiet=False
             )
         else:
             # Local development
             print("💻 Running locally...")
-            app.app.launch(
+            app.launch(
                 server_name="0.0.0.0",
                 server_port=7860,
                 share=False,  # Set to True if you want a public link
-                auth=("admin", "finance123"),
                 show_error=True,
                 quiet=False
             )
